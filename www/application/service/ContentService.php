@@ -9,8 +9,8 @@ class ContentService
         $sql = "select * from content where id=$id ";
         $result = $db->queryOne($sql);
         $content =new Content();
-        $content->id=$result["content"];
-        $categoryId = $result["categoryId"];
+        $content->id=$result["id"];
+        $categoryId = $result["category_id"];
         $content->categoryId=$categoryId;
         $content->title=$result["title"];
         $content->content=$result["content"];
@@ -19,7 +19,7 @@ class ContentService
         $content->copyFrom=$result["copy_from"];
         $content->addTime=$result["add_time"];
         $content->updateTime=$result["update_time"];
-        $content->closeConnection();
+        $db->closeConnection();
         return $content;
     }
 
@@ -78,7 +78,7 @@ class ContentService
         $title =$content->title;
         $keywords =$content->keywords;
         $desc =$content->description;
-        $sql = "update content set categoryId=$categoryId, content='$contents',copyFrom='$copyFrom',title='$title',keywords='$keywords',description='$desc',update_time=now() where id=$id";
+        $sql = "update content set category_id=$categoryId, content='$contents',copy_from='$copyFrom',title='$title',keywords='$keywords',description='$desc',update_time=now() where id=$id";
         $db->update($sql);
         $db->closeConnection();
     }

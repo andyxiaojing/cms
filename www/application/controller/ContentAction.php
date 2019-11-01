@@ -43,14 +43,16 @@ class ContentAction
     function toUpdatePage(){
         $id = $_GET["id"];
         $contentService = new ContentService();
+        $categoryService = new CategoryService();
         $content = $contentService->findOne($id);
+        $categoryList = $categoryService->findList();
         $smarty = SmartyUtil::getSmarty();
+        $smarty->assign("categoryList",$categoryList);
         $smarty->assign("content",$content);
         $smarty->display("content_update.tpl");
     }
 
     function update(){
-        $cat = new Category;
         $content = new Content();
         $content->id = $_POST["id"];
         $content->categoryId=$_POST["categoryId"];
@@ -60,8 +62,8 @@ class ContentAction
         $content->keywords=$_POST["keywords"];
         $content->description=$_POST["description"];
         $contentService = new ContentService();
-        $contentService->update($cat);
-        header("Location: index.php?model=category&method=index", true, 301);
+        $contentService->update($content);
+        header("Location: index.php?model=content&method=index", true, 301);
 
 
     }

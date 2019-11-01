@@ -30,7 +30,6 @@ class CategoryAction
         $cat->setStatus($status);
         $categoryService = new CategoryService();
         $categoryService->add($cat);
-
         header("Location: index.php?model=category&method=index", true, 301);
     }
 
