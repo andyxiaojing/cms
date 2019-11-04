@@ -8,6 +8,7 @@ class ContentService
         $db = DbOperation::getDb();
         $sql = "select * from content where id=$id ";
         $result = $db->queryOne($sql);
+
         $content =new Content();
         $content->id=$result["id"];
         $categoryId = $result["category_id"];
@@ -24,9 +25,9 @@ class ContentService
     }
 
 
-    function findList(){
+    function findList($sortField,$action){
         $db = DbOperation::getDb();
-        $sql = "select * from content order by id desc  limit 10000 ";
+        $sql = "select * from content order by $sortField $action  limit 10000 ";
         $result = $db->select($sql);
         $arrayContent = array();
         foreach ($result as $row){
@@ -44,6 +45,7 @@ class ContentService
           $content->categoryName= $cat->name;
           array_push($arrayContent,$content);
         }
+      //  print_r($arrayContent);die();
         $db->closeConnection();
         return $arrayContent;
     }

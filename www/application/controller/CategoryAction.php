@@ -6,14 +6,15 @@ class CategoryAction
     function index(){
         $categoryService = new CategoryService();
         $result = $categoryService->findList();
-        $smarty = SmartyUtil::getSmarty();
-        $smarty->assign("arrayData",$result);
-        $smarty->display("category_index.tpl");
+        $view = ViewUtil::getView();
+       // print_r($result);die();
+        $view->addData("arrayData",$result);
+        $view->display("category_index.php");
     }
 
     function toAddPage(){
-        $smarty = SmartyUtil::getSmarty();
-        $smarty->display("category_add.tpl");
+        $view = ViewUtil::getView();
+        $view->display("category_add.php");
     }
 
 
@@ -46,10 +47,9 @@ class CategoryAction
         $categoryService = new CategoryService();
         $cat = $categoryService->findOne($id);
       //  print_r($cat);die();
-
-        $smarty = SmartyUtil::getSmarty();
-        $smarty->assign("cat",$cat);
-        $smarty->display("category_update.tpl");
+        $view = ViewUtil::getView();
+        $view->addData("cat",$cat);
+        $view->display("category_update.php");
     }
 
     function update(){

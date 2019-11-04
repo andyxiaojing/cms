@@ -22,7 +22,7 @@ class CategoryService
 
     function findList(){
         $db = DbOperation::getDb();
-        $sql = "select * from category where status =1 order by id desc  limit 10000 ";
+        $sql = "select * from category order by id desc  limit 10000 ";
         $result = $db->select($sql);
         $arrayContent = array();
         foreach ($result as $row){

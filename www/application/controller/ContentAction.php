@@ -4,19 +4,29 @@
 class ContentAction
 {
     function index(){
+        $sortField = $_GET["sortField"];
+        if ($sortField==null){
+            $sortField = "add_time";
+        }
+        $sortAction = $_GET["sortAction"];
+        if ($sortAction==null){
+            $sortAction = "desc";
+        }
         $contentService = new ContentService();
-        $result = $contentService->findList();
-        $smarty = SmartyUtil::getSmarty();
-        $smarty->assign("arrayData",$result);
-        $smarty->display("content_index.tpl");
+        $result = $contentService->findList($sortField,$sortAction);
+        $view = ViewUtil::getView();
+        $view->addData("sortField",$sortField);
+        $view->addData("sortAction",$sortAction);
+        $view->addData("arrayData",$result);
+        $view->display("content_index.php");
     }
 
     function toAddPage(){
         $categoryService = new CategoryService();
         $categoryList = $categoryService->findList();
-        $smarty = SmartyUtil::getSmarty();
-        $smarty->assign("categoryList",$categoryList);
-        $smarty->display("content_add.tpl");
+        $view = ViewUtil::getView();
+        $view->addData("categoryList",$categoryList);
+        $view->display("content_add.php");
     }
 
 
@@ -33,11 +43,23 @@ class ContentAction
         header("Location: index.php?model=content&method=index", true, 301);
     }
 
-    function delete(){
+   function delete(){
         $id = $_GET["id"];
         $contentService = new ContentService();
         $contentService->delete($id);
         header("Location: index.php?model=content&method=index", true, 301);
+    }
+
+    function detail(){
+        $id = $_GET["id"];
+        $contentService = new ContentService();
+        $categoryService = new CategoryService();
+        $content = $contentService->findOne($id);
+        $categoryList = $categoryService->findList();
+        $view = ViewUtil::getView();
+        $view->addData("categoryList",$categoryList);
+        $view->addData("content",$content);
+        $view->display("content_detail.php");
     }
 
     function toUpdatePage(){
@@ -46,10 +68,10 @@ class ContentAction
         $categoryService = new CategoryService();
         $content = $contentService->findOne($id);
         $categoryList = $categoryService->findList();
-        $smarty = SmartyUtil::getSmarty();
-        $smarty->assign("categoryList",$categoryList);
-        $smarty->assign("content",$content);
-        $smarty->display("content_update.tpl");
+        $view = ViewUtil::getView();
+        $view->addData("categoryList",$categoryList);
+        $view->addData("content",$content);
+        $view->display("content_update.php");
     }
 
     function update(){
